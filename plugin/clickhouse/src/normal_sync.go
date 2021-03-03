@@ -143,7 +143,8 @@ func (This *Conn) CommitNormal(list []*pluginDriver.PluginDataType,n int) (errDa
 			}else{
 				where = "'"+strings.Replace(strings.Trim(fmt.Sprint(keys), "[]"), " ", "','", -1)+"'"
 			}
-			sql := "ALTER TABLE "+This.p.ckDatakey+" DELETE WHERE "+This.p.ckPriKey+ " in ( " +where+" )"
+			// TODO 支持CK的分布式表
+			sql := "ALTER TABLE "+This.p.ckDatakey+" ON CLUSTER yxck  DELETE WHERE "+This.p.ckPriKey+ " in ( " +where+" )"
 			if This.p.bifrostDataVersionField != ""{
 				sql += " AND " + This.p.bifrostDataVersionField + " < "+ fmt.Sprint(This.p.nowBifrostDataVersion)
 			}
